@@ -2,11 +2,11 @@ const router = require("express").Router();
 
 
 //--user/login
-router.post();
+// router.post();
 
 
 //--user/dashboard
-router.get('/dashboard', auth.author , dashboard.get);
+// router.get('/dashboard', auth.author , dashboard.get);
 
 
 
