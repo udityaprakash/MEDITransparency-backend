@@ -9,7 +9,7 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(express.static("public"));
 
-connectDB.adminconnection();
+// connectDB.adminconnection();
 connectDB.doctorconnection();
 connectDB.patientconnection();
 
