@@ -1,9 +1,15 @@
 const router = require("express").Router();
-const {signup,login} = require("../SRC/Auth/Authentication/user");
+const {psignup,plogin} = require("../SRC/Auth/Authentication/user");
 
-//--doctor/signup
-router.post('/signup',signup.post);
-router.get('/signup',signup.get);
+//user/signup
+router.post('/signup',psignup.post);
+router.get('/signup',psignup.get);
+
+//user/login
+router.post('/login',plogin.post);
+router.get('/signup',psignup.get);
+
+
 
 module.exports = router;
 

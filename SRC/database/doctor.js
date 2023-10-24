@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-
-const schema= new mongoose.Schema({
+const Schema = mongoose.Schema;
+const schema= new Schema({
     doctor_name : {
      type:String,
     },
-    phonenumber : {
+    phone_number : {
       type:Number,
       min:10,
       required:true
@@ -14,19 +14,14 @@ const schema= new mongoose.Schema({
         min:8,
         require:true
     },
-    // email: {
-    //   type: String,
-    //   trim: true,
-    //   lowercase: true,
-    //   unique: true,
-    //   validate: {
-    //       validator: function(v) {
-    //           return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-    //       },
-    //       message: "Please enter a valid email"
-    //   },
-    //   required: [true, "Email required"]
-    // },
+    hospitals:[{
+        hospital_name:{type:String},
+        patients:[{
+          patientid:{
+            type: Schema.Types.ObjectId,
+            ref:'patient'}, 
+        }]
+    }],
     otp:{
       type:Number,
       default:null
@@ -35,6 +30,6 @@ const schema= new mongoose.Schema({
       type:Boolean,
       default:false
     }
-});
+}, { timestamps: true });
 
 module.exports =mongoose.model("doctor" , schema);

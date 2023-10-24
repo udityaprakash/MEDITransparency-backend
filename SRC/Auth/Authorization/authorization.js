@@ -10,8 +10,6 @@ const author = (req,res,next)=>{
                 token=token.split(" ")[1];
                 let user = jwt.verify(token, process.env.SECRET_KEY);
                 req.userId = user.id;
-                req.email = user.email;
-                req.usertype = user.usertype; 
                 next();
             }catch(err){
                 res.status(401).json({succes:false, msg:"Invalid Token"});
