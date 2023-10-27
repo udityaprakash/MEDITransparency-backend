@@ -16,7 +16,7 @@ connectDB.patientconnection();
 
 //routes
 app.use('/doctor',require('./routers/doctorrouter'));
-// app.use('/admin',require('./routers/adminrouter'));
+app.use('/hospital',require('./routers/hospitalrouter'));
 app.use('/user',require('./routers/userrouter'));
 
 const port= process.env.PORT || 3000;

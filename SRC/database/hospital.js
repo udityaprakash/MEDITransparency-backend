@@ -1,29 +1,50 @@
 const mongoose = require("mongoose");
-
+const Schema = mongoose.Schema;
 const schema= new mongoose.Schema({
     hopital_name : {
      type:String,
+    },
+    hospital_logo:{
+      name: String,
+      data: Buffer,
+      contentType: String,
     },
     phonenumber : {
       type:Number,
       min:10,
       required:true
      },
-    doctors:[
-        {
-            name:{type: String},
-            // docid:{type:}
-        }
-        
-    ],
-    otp:{
+    doctors:[{
+      doctor_id:{
+        type: Schema.Types.ObjectId,
+        ref: 'doctor'
+      },
+      patients:[{
+        type: Schema.Types.ObjectId,
+        ref: 'patient'
+      }],
+      timestamps: { 
+        createdAt: { type: Date, default: Date.now },
+        updatedAt: { type: Date, default: Date.now }
+      }
+  }],
+  no_of_icu_beds:Number,
+  GST_no:String,
+  authority_sign:{
+    name: String,
+    data: Buffer,
+    contentType: String,
+  },
+  year_of_establishment:Date,
+  patients:Array,
+  otp:{
       type:Number,
       default:null
-    },
-    is_verified:{
+  },
+  is_verified:{
       type:Boolean,
       default:false
-    }
+  }
 });
 
-module.exports =mongoose.model("doctor" , schema);
+module.exports =mongoose.model("hospital" , schema);
