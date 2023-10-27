@@ -10,7 +10,7 @@ app.use(bodyparser.urlencoded({extended:false}));
 app.use(express.static("public"));
 
 // connectDB.adminconnection();
-connectDB.doctorconnection();
+// connectDB.doctorconnection();
 connectDB.patientconnection();
 
 
