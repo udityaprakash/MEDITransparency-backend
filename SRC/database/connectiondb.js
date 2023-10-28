@@ -10,7 +10,7 @@ const connectDB =  {
                 await mongoose.connect(process.env.MONGODB_URL,  {useNewUrlParser: true, useUnifiedTopology: true }
                 ).then(()=>console.log("patient db connected successfully")
                 ).catch((e)=>{
-                  console.log(`Error while connection patient, Retrying ${i++}`);
+                  console.log(`Error while connection patient, Retrying ${i++}`+ e);
                   connectDB.patientconnection();
                 });
             }
