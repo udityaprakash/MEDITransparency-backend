@@ -9,7 +9,8 @@ const schema= new mongoose.Schema({
       data: Buffer,
       contentType: String,
     },
-    phonenumber : {
+    hospital_address:String,
+    phone_number : {
       type:Number,
       min:10,
       required:true
@@ -29,13 +30,13 @@ const schema= new mongoose.Schema({
       }
   }],
   no_of_icu_beds:Number,
-  GST_no:String,
+  gst_no:String,
   authority_sign:{
     name: String,
     data: Buffer,
     contentType: String,
   },
-  year_of_establishment:Date,
+  year_of_establishment:Number,
   patients:Array,
   otp:{
       type:Number,

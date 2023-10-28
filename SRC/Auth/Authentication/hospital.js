@@ -1,21 +1,18 @@
-const doctorDB = require("../../database/doctor");
+const hospitalDB = require("../../database/hospital");
 const bcrypt = require('bcrypt');
 require('dotenv').config()
-const multer = require('multer');
-const sharp = require('sharp');
+const {compressor} = require("../File_Validators/imagefile");
 const jwt = require("jsonwebtoken");
 let Hsignup = {
     post:async (req,res)=>{
 
         try{
 
-            let { hospitalname, phonenumber,nooficubeds,GSTno,yoestablishment, hospital } = req.body;
+            let { hospitalname,address, phonenumber,nooficubeds,GSTno,yoestablishment} = req.body;
             
-            const logo = req.files['hospitallogo'][0];
-            const sign = req.files['sign'][0];
 
-            console.log(phonenumber.length,hospital);
-            if(!hospitalname || !phonenumber|| !nooficubeds|| !GSTno|| !yoestablishment || !logo || !sign){
+            // console.log(phonenumber.length);
+            if(!hospitalname || !address || !phonenumber|| !nooficubeds|| !GSTno|| !yoestablishment){
                 res.json({
                     success:false,
                     msg:"All fields are required"
@@ -25,24 +22,25 @@ let Hsignup = {
                 if(phonenumber.length!=10){
                     return res.send({success: false, msg:'Phone number must be 10 digits'})
                 }
-                    const salt= parseInt(process.env.SALTLEN);
-                    hashedpassword = await bcrypt.hash(password, salt);
-                    console.log("password:" + hashedpassword);
-                    doctorname = doctorname.toLowerCase();
-                    // res.json({
-                    //     success:true
-                    // });
-                    const doc = new doctorDB({
-                        doctor_name:doctorname,
+                console.log(yoestablishment);
+                hospitalname = hospitalname.toLowerCase();
+                    const doc = new hospitalDB({
+                        hopital_name:hospitalname,
                         phone_number:phonenumber,
-                        password:hashedpassword,
-                        hospitals:hospital
+                        no_of_icu_beds:nooficubeds,
+                        gst_no: GSTno,
+                        year_of_establishment: yoestablishment,
+                        hospital_address:address,
                     });
-                    await doc.save().then((user)=>{
-                        res.status(200).json({
+
+                    await doc.save().then(async (user)=>{
+                        console.log("data saved");
+                        let token = await jwt.sign({ id:user._id }, process.env.SECRET_KEY );
+                        console.log("token is :"+token);
+                        res.json({
                           success:true,
-                          doctor_id:doc._id,
-                          msg:"Doctor Recorded Successfully"
+                          hospital_token:token,
+                          msg:"hospital Registered Successfully"
                         });
                     }).catch((err)=>{
                             res.status(400).json({
@@ -55,6 +53,54 @@ let Hsignup = {
         }catch{
             res.send({success:false,message:'Error in SignUp'})
         }
+    },
+    uploadimg:async (req,res)=>{
+        try{
+            let id = req.userId;
+            
+            var logo = req.files['hospitallogo'][0];
+            var sign = req.files['sign'][0];
+            
+            // console.log(phonenumber.length,hospital);
+            if(!logo || !sign){
+                res.json({
+                    success:false,
+                    msg:"sign or the logo is missing"
+                });
+            }
+            else{
+                logo.buffer =await compressor(logo.buffer);
+                sign.buffer =await compressor(sign.buffer);
+                
+                    await hospitalDB.findByIdAndUpdate(id, { 
+                        hospital_logo:{
+                            name:logo.originalname,
+                            data:logo.buffer,
+                            contentType:logo.mimetype
+                        },
+                        authority_sign:{
+                            name:sign.originalname,
+                            data:sign.buffer,
+                            contentType:sign.mimetype
+                        }, 
+                    }).then((user)=>{
+                        res.status(200).json({
+                          success:true,
+                          msg:"hospital logo and sign were Registered Successfully"
+                        });
+                    }).catch((err)=>{
+                            res.status(400).json({
+                                success:false,
+                                error:err
+                            });
+                    });
+                    
+                
+            }
+        }catch{
+            res.send({success:false,message:'Error in SignUp'})
+        }
+
     },
     get:(req,res)=>{
         console.log("success for get method");
