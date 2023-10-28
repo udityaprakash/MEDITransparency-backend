@@ -4,11 +4,11 @@ require('dotenv').config()
 const jwt = require("jsonwebtoken");
 let Dsignup = {
     post:async (req,res)=>{
-
         try{
-
-            let { doctorname, phonenumber, password, hospital } = req.body;
-            console.log(phonenumber.length,hospital);
+            
+            let { doctorname, phonenumber, password } = req.body;
+            console.log("here");
+            console.log(phonenumber.length);
             if(!doctorname || !phonenumber || !password){
                 res.json({
                     success:false,
@@ -23,14 +23,10 @@ let Dsignup = {
                     hashedpassword = await bcrypt.hash(password, salt);
                     console.log("password:" + hashedpassword);
                     doctorname = doctorname.toLowerCase();
-                    // res.json({
-                    //     success:true
-                    // });
                     const doc = new doctorDB({
                         doctor_name:doctorname,
                         phone_number:phonenumber,
-                        password:hashedpassword,
-                        hospitals:hospital
+                        password:hashedpassword
                     });
                     await doc.save().then((user)=>{
                         res.status(200).json({

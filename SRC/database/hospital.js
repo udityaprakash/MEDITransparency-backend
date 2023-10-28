@@ -29,6 +29,10 @@ const schema= new mongoose.Schema({
         updatedAt: { type: Date, default: Date.now }
       }
   }],
+  all_doctor_ids:[{
+    type: Schema.Types.ObjectId,
+    ref: 'doctor'
+  }],
   no_of_icu_beds:Number,
   gst_no:String,
   authority_sign:{

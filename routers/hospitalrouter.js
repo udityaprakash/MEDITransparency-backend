@@ -16,6 +16,8 @@ router.post(
 
     router.post('/signup', Hsignup.post);  
 
+    router.post('/adddoctors',auth.author,Hsignup.adddoctor);
+
 
 
 module.exports = router;

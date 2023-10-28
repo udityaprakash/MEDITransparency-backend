@@ -1,4 +1,5 @@
 const hospitalDB = require("../../database/hospital");
+const doctorDB = require("../../database/doctor");
 const bcrypt = require('bcrypt');
 require('dotenv').config()
 const {compressor} = require("../File_Validators/imagefile");
@@ -71,7 +72,7 @@ let Hsignup = {
             else{
                 logo.buffer =await compressor(logo.buffer);
                 sign.buffer =await compressor(sign.buffer);
-                
+
                     await hospitalDB.findByIdAndUpdate(id, { 
                         hospital_logo:{
                             name:logo.originalname,
@@ -102,6 +103,50 @@ let Hsignup = {
         }
 
     },
+    adddoctor:async(req,res)=>{
+
+        let id = req.userId;
+        console.log(id);
+
+        const doctorids = req.body.doctorids;
+        var user;
+        // console.log(req.body);
+        try{
+            for (let i=0 ;i<doctorids.length;i++){
+                console.log("doctor ids :"+doctorids[i]);
+                
+                await hospitalDB.findByIdAndUpdate(id, {
+                    
+                    $push: { all_doctor_ids: ObjectId(doctorids[i]) },
+                    
+                }).then((user)=>{
+                }).catch( (e)=>{
+                    console.log("hee");
+                    console.log(e);
+                });
+                console.log(user);
+                
+                await doctorDB.findByIdAndUpdate(doctorids[i], { 
+                    $push: { all_hospitals: ObjectId(id) }, 
+                }).then((user)=>{
+                    console.log(user);
+                }).catch( (e)=>{
+                    console.log(e);
+                });
+
+            }
+            res.status(200).json({
+                  success:true,
+                  msg:"doctor was successfully added"
+            });
+          
+
+        }catch{
+            res.send({
+                success:false,
+                message:'Error in adding doctor'});
+        }
+    },
     get:(req,res)=>{
         console.log("success for get method");
         res.json({
@@ -112,6 +157,12 @@ let Hsignup = {
 
 }
 
+let config = {
+    assignpatient:async (req,res)=>{
+        console.log('assign patient');
+    }
+}
 
 
-module.exports = {Hsignup};
+
+module.exports = {Hsignup,config};

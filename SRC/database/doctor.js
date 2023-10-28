@@ -47,6 +47,10 @@ const schema= new Schema({
           updatedAt: { type: Date, default: Date.now }
         }
     }],
+    all_hospitals:[{
+      type: Schema.Types.ObjectId,
+      ref: 'hospital'
+    }],
     otp:{
       type:Number,
       default:null
