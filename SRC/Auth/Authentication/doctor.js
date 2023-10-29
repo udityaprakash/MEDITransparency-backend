@@ -71,7 +71,7 @@ let Dlogin = {
                 if(match){
                     let token = jwt.sign({ id:result._id}, process.env.SECRET_KEY);
                     res.status(200).json({
-                    status:true,
+                    success:true,
                     token:token,
                     msg:"Successfull Login"
                     });
