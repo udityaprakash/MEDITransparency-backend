@@ -2,7 +2,7 @@ const router = require("express").Router();
 const auth = require("../SRC/Auth/Authorization/authorization");
 const {Hsignup} = require("../SRC/Auth/Authentication/hospital");
 const {upload}=require("../SRC/Auth/File_Validators/imagefile");
-
+const {logo} = require("../SRC/components/hospital/logo");
 
 //hospital/signup
 router.post(
@@ -15,6 +15,8 @@ router.post(
     Hsignup.uploadimg);
 
     router.post('/signup', Hsignup.post);  
+
+    router.get('/logo/:id',logo.logosend);
 
     router.post('/adddoctors',auth.author,Hsignup.adddoctor);
 
