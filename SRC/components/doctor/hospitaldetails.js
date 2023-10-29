@@ -14,7 +14,7 @@ let hospitals = {
             var det, jes = {};
             det = await hospitalDB.findById(result.all_hospitals[i],'hopital_name');
             // console.log(det);
-            Object.assign(jes, {imgurl: "/hospital/logo/"+det._id});
+            Object.assign(jes, {imgurl: "https://meditransparency.onrender.com/hospital/logo/"+det._id});
             Object.assign(jes, {name: det.hopital_name});
             // console.log(jes);
             // const mergedObj = Object.assign({}, det, jes);
