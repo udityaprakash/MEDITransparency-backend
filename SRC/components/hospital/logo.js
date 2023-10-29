@@ -11,11 +11,12 @@ let logo = {
             const image = await hospitalDB.findById(id,'hospital_logo');
             // console.log(image);
             if (!image) {
-              console.log("no such image found");
+                res.status(404).json({ error: 'Not found' });
+            }else{
+                res.setHeader('Content-Type', image.hospital_logo.contentType);
+                res.send(image.hospital_logo.data);
             }
         
-            res.setHeader('Content-Type', image.hospital_logo.contentType);
-            res.send(image.hospital_logo.data);
           } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Internal server error.' });
