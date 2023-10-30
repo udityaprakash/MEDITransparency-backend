@@ -38,6 +38,12 @@ const schema= new mongoose.Schema({
       }
       
     },
+    active_medical_record:{
+      hospital_id:{
+        type: Schema.Types.ObjectId,
+        ref: 'hospital'
+      },
+    },
     medical_history:[
       {
         hospital_id:{
