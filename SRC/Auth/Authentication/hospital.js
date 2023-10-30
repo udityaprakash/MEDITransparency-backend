@@ -159,6 +159,74 @@ let Hsignup = {
 
 let config = {
     assignpatient:async (req,res)=>{
+        const id = req.userId;
+        let {patientid , doctorid}= req.body;
+        const result = await hospitalDB.findOneById(id);
+        if(!result){
+            return res.status(401).json({success:false,msg:"no such hospital exist"});
+        }else{
+            try{
+                let doctorlist = result.all_doctor_ids;
+                let patientlist = result.all_patient_ids;
+                var isdoctor = false;
+                var ispatient = false;
+
+                for(let i=0;i<doctorlist.length;i++){
+                    if(doctorlist[i] == doctorid){
+                        isdoctor = true;
+                        break;
+
+                    }
+                }
+                if(isdoctor){
+                        for(let i = 0;i < patientlist.length; i++){
+                            if(doctorlist[i] == doctorid){
+                                ispatient = true;
+                                break;
+                                
+                            }
+                        }
+                        if(ispatient){
+                            let haspatient = false;
+                            var patients_of_doctor = result.doctors;
+                            for(let i=0;i<patients_of_doctor.length;i++){
+                                if(patients_of_doctor[i].doctor_Id == doctorid){
+                                    haspatient = true;
+                                    break;
+                                }
+                            }
+                            if(haspatient){
+
+                                // await hospitalDB.findByIdAndUpdate(id,{
+                                    
+                                // });
+                            }else{
+                                // await hospitalDB.findByIdAndUpdate(id,{
+
+                                // });
+                            }
+
+
+                        }else{
+                            res.json({
+                                success: false,
+                                msg:"patient does not belong to this hospital"
+                            });
+                        }
+                        
+                }else{
+                        res.json({
+                            success: false,
+                            msg:"doctor does not belong to this hospital"
+                        });
+
+            }
+
+
+            }catch{
+
+            }
+        }
         console.log('assign patient');
     }
 }

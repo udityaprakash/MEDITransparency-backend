@@ -33,6 +33,10 @@ const schema= new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: 'doctor'
   }],
+  all_patient_ids:[{
+    type: Schema.Types.ObjectId,
+    ref: 'patient'
+  }],
   no_of_icu_beds:Number,
   gst_no:String,
   authority_sign:{

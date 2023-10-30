@@ -17,4 +17,6 @@ router.get('/hospitals', auth.author, hospitals.get);
 
 //--doctor/patients/
 router.post('/patients', auth.author, patients.post);
+
+
 module.exports = router;

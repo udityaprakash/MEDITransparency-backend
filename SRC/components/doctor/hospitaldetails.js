@@ -16,6 +16,7 @@ let hospitals = {
             // console.log(det);
             Object.assign(jes, {imgurl: "https://meditransparency.onrender.com/hospital/logo/"+det._id});
             Object.assign(jes, {name: det.hopital_name});
+            Object.assign(jes, {id: det._id});
             // console.log(jes);
             // const mergedObj = Object.assign({}, det, jes);
             list.push(jes);
