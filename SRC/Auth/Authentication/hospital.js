@@ -161,7 +161,15 @@ let config = {
     assignpatient:async (req,res)=>{
         const id = req.userId;
         let {patientid , doctorid}= req.body;
-        const result = await hospitalDB.findOneById(id);
+        var result;
+        try{
+
+            result = await hospitalDB.findById(id);
+        }catch(e){
+
+            console.log(e);
+        }
+        
         if(!result){
             return res.status(401).json({success:false,msg:"no such hospital exist"});
         }else{
@@ -180,7 +188,7 @@ let config = {
                 }
                 if(isdoctor){
                         for(let i = 0;i < patientlist.length; i++){
-                            if(doctorlist[i] == doctorid){
+                            if(patientlist[i] == patientid){
                                 ispatient = true;
                                 break;
                                 
@@ -197,13 +205,18 @@ let config = {
                             }
                             if(haspatient){
 
+                                hospitalDB.findOneAndUpdate( { _id : id },{ $push: { "achieve": 95 } });
                                 // await hospitalDB.findByIdAndUpdate(id,{
-                                    
+                                //     doctors: { 
+                                //         doctor_id: doctorid,
+                                //         { $push: { patients: ObjectId (patientid)}}
+                                //     }
+                                //     // { $push: { <field>: <value> } 
                                 // });
                             }else{
-                                // await hospitalDB.findByIdAndUpdate(id,{
-
-                                // });
+                                await hospitalDB.findByIdAndUpdate(id,{
+                                    doctors:{ $push: { doctor_id: doctorid, patients:[ObjectId(patientid)] } }
+                                });
                             }
 
 
