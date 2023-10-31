@@ -190,33 +190,64 @@ let config = {
                         for(let i = 0;i < patientlist.length; i++){
                             if(patientlist[i] == patientid){
                                 ispatient = true;
-                                break;
-                                
+                                break;                                
                             }
                         }
                         if(ispatient){
                             let haspatient = false;
                             var patients_of_doctor = result.doctors;
                             for(let i=0;i<patients_of_doctor.length;i++){
-                                if(patients_of_doctor[i].doctor_Id == doctorid){
+                                if(patients_of_doctor[i].doctor_id == doctorid){
                                     haspatient = true;
                                     break;
                                 }
                             }
                             if(haspatient){
+                                console.log("has");
+                                var currentlist = result.doctors;
 
-                                hospitalDB.findOneAndUpdate( { _id : id },{ $push: { "achieve": 95 } });
-                                // await hospitalDB.findByIdAndUpdate(id,{
-                                //     doctors: { 
-                                //         doctor_id: doctorid,
-                                //         { $push: { patients: ObjectId (patientid)}}
-                                //     }
-                                //     // { $push: { <field>: <value> } 
-                                // });
-                            }else{
+                                for(let j=0 ;j<currentlist.length;j++){
+                                    if(currentlist[j].doctor_id == doctorid){
+                                        currentlist[j].patients.push( patientid );
+                                        break;
+                                    }
+                                }
                                 await hospitalDB.findByIdAndUpdate(id,{
-                                    doctors:{ $push: { doctor_id: doctorid, patients:[ObjectId(patientid)] } }
+                                    doctors: currentlist
+                                }).then((user)=>{
+                                    console.log("updated");
+                                    res.json({
+                                        success:true,
+                                        users:user.doctors,
+                                        msg:"data added"
+                                    });
+                                }).catch((err)=>{
+                                    res.json({
+                                        success:false,
+                                        error:err,
+                                        msg:"was an error"
+                                    });
+                                });;
+                            }else{
+                                console.log("not has");
+                                var liste = [ patientid ];
+                                await hospitalDB.findByIdAndUpdate(id,{
+                                    $push: {doctors: { doctor_id: doctorid, patients: liste  } }
+                                }).then((user)=>{
+                                    console.log("updated");
+                                    res.json({
+                                        success:true,
+                                        users:user,
+                                        msg:"data added"
+                                    });
+                                }).catch((err)=>{
+                                    res.json({
+                                        success:false,
+                                        error:err,
+                                        msg:"was an error"
+                                    });
                                 });
+                                
                             }
 
 
