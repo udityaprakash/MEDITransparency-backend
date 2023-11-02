@@ -44,7 +44,10 @@ async function listgeneratorofpatients(ids){
             if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
                 age--;
             }
+            
             Object.assign(jes, {age: age});
+            var regdate = det.createdAt.getDate()+"/"+det.createdAt.getMonth()+"/"+det.createdAt.getFullYear();
+            Object.assign(jes, {registeredon: regdate});
                 // console.log(jes);
                 // const mergedObj = Object.assign({}, det, jes);
             patientlist.push(jes);
