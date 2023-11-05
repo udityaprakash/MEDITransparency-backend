@@ -7,6 +7,11 @@ const schema= new Schema({
     doctor_name : {
      type:String,
     },
+    doctor_photo:{
+      name: String,
+      data: Buffer,
+      contentType: String,
+    },
     phone_number : {
       type:Number,
       min:10,
