@@ -17,6 +17,7 @@ const schema= new mongoose.Schema({
       min:10,
       required:true
      },
+    p_email:{type:String}, //patient email
     password: {
         type:String,
         min:8,
@@ -28,6 +29,7 @@ const schema= new mongoose.Schema({
         type: String,
         enum: genderoptions
       },
+      weight:{type:Number},
       location:{type:String},
       city:{type:String},
       state:{type:String},
@@ -46,13 +48,11 @@ const schema= new mongoose.Schema({
     },
     medical_history:[
       {
-        hospital_id:{
+        medicalrecord_id:{
           type: Schema.Types.ObjectId,
-          ref: 'hospital'
+          ref: 'p_medicalrecord'
         },
-        title:String,
-        disc:String,
-        timestamps: { 
+        timestamps: {
           createdAt: { type: Date, default: Date.now },
           updatedAt: { type: Date, default: Date.now }
         }

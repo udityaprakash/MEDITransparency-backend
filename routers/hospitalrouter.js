@@ -3,6 +3,7 @@ const auth = require("../SRC/Auth/Authorization/authorization");
 const {Hsignup, config} = require("../SRC/Auth/Authentication/hospital");
 const {upload}=require("../SRC/Auth/File_Validators/imagefile");
 const {logo} = require("../SRC/components/hospital/logo");
+const {create} = require("../SRC/components/hospital/create");
 
 //hospital/signup
 router.post(
@@ -12,15 +13,17 @@ router.post(
         { name: 'hospitallogo', maxCount: 1 },
         { name: 'sign', maxCount: 1 }
     ]), 
-    Hsignup.uploadimg);
+Hsignup.uploadimg);
 
-    router.post('/signup', Hsignup.post);  
+router.post('/signup', Hsignup.post);  
 
-    router.get('/logo/:id',logo.logosend);
+router.get('/logo/:id',logo.logosend);
 
-    router.post('/adddoctors',auth.author, Hsignup.adddoctor);
+router.post('/adddoctors',auth.author, Hsignup.adddoctor);
 
-    router.post('/assignpatient', auth.author, config.assignpatient);
+router.post('/assignpatient', auth.author, config.assignpatient);
+
+router.post('/create/medicalrecord', auth.author,create.medicalrecord);
 
 
 module.exports = router;
