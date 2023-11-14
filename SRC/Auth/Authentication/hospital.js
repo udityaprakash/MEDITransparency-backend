@@ -106,37 +106,53 @@ let Hsignup = {
     adddoctor:async(req,res)=>{
 
         let id = req.userId;
-        console.log(id);
-
+        
         const doctorids = req.body.doctorids;
-        var user;
+        // var user;
+        var notaddeddoctors=[];
         // console.log(req.body);
         try{
-            for (let i=0 ;i<doctorids.length;i++){
-                console.log("doctor ids :"+doctorids[i]);
+            var result = await hospitalDB.findById(id);
+            if(!result){
+                // console.log(user);
+                res.status(200).json({
+                    success:false,
+                    msg:"no such hospital exixt."
+              });
                 
+            }else{
+                var doctlist = result.all_doctor_ids;
+                for (let i=0 ;i<doctorids.length;i++){
+                    console.log("doctor ids :"+doctorids[i]);
+                    
+                    doctlist.push(doctorids[i]);
+                    await doctorDB.findByIdAndUpdate(doctorids[i], { 
+                        $push: { all_hospitals: id }, 
+                    }).then((user)=>{
+                        console.log(user);
+                    }).catch( (e)=>{
+                        notaddeddoctors.push(doctorids[i]);
+                        console.log("error :"+e);
+                    });
+                    
+                }
                 await hospitalDB.findByIdAndUpdate(id, {
                     
-                    $push: { all_doctor_ids: ObjectId(doctorids[i]) },
+                    all_doctor_ids: doctlist,
                     
                 }).then((user)=>{
                 }).catch( (e)=>{
-                    console.log("hee");
-                    console.log(e);
-                });
-                console.log(user);
-                
-                await doctorDB.findByIdAndUpdate(doctorids[i], { 
-                    $push: { all_hospitals: ObjectId(id) }, 
-                }).then((user)=>{
-                    console.log(user);
-                }).catch( (e)=>{
+                    console.log("here error occured :");
                     console.log(e);
                 });
 
             }
             res.status(200).json({
                   success:true,
+                  errdetails:{
+                    count:notaddeddoctors.length,
+                    notadded:notaddeddoctors
+                  },
                   msg:"doctor was successfully added"
             });
           
@@ -275,6 +291,17 @@ let config = {
     }
 }
 
+let hlogin = async(req , res) => {
+    let id = req.body.id;
+    let token = await jwt.sign({ id:id }, process.env.SECRET_KEY );
+    console.log("token is :"+token);
+    res.json({
+        success:true,
+        hospital_token:token,
+        msg:"hospital Registered Successfully"
+    });
+}
 
 
-module.exports = {Hsignup,config};
+
+module.exports = {Hsignup, config, hlogin};

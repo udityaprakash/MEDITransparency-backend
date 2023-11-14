@@ -139,17 +139,21 @@ let setupprofile = {
         try{
             const id = req.userId;
             const genderoptions = ['M', 'F'];
-            let {gender, dobyear, dobmonth , dobdate } = req.body;
-
-            // console.log(phonenumber.length);
-            if(!dobyear || !dobmonth || !dobdate || !gender){
+            let {gender, 
+                // dobyear, dobmonth , 
+                dob
+                ,weight ,bloodgrp, location} = req.body;
+            var dobt = new Date( dob );
+            // console.log(dobt.getDate(), dobt.getMonth());
+            if( !dob || !gender || !weight || !bloodgrp || !location){
                 res.json({
                     success:false,
                     msg:"All fields are required"
                 });
             }
             else{
-                console.log(id, genderoptions.includes(gender));
+                // console.log("here");
+                // console.log(id, genderoptions.includes(gender));
                 if(genderoptions.includes(gender)){
                     await patientDB.findByIdAndUpdate( id,{
                         
@@ -157,7 +161,10 @@ let setupprofile = {
                         
                         general_details:{
                             gender:gender,
-                            dob: new Date(dobyear, dobmonth , dobdate),
+                            dob: dobt,
+                            weight:weight,
+                            location:location,
+                            bloodGroup:bloodgrp
                         }
                         
                     }).then(async (user)=>{
@@ -185,8 +192,8 @@ let setupprofile = {
                     
                 
             }
-        }catch{
-            res.send({success:false,message:'Error in SignUp'})
+        }catch(err){
+            res.send({success:false,error:err,message:'Error in Setting Up profile'});
         }
     }
 }

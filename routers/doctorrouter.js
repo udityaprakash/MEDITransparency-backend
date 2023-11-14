@@ -29,6 +29,8 @@ router.get('/photo/:id',Docprofile.sendphoto);
 
 router.get('/profiledetails', auth.author, Docprofile.profile);
 
+router.post('/patient/profiledetails', auth.author, Docprofile.patientprofile);
+
 
 
 

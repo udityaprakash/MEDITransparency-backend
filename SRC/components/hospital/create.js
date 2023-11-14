@@ -10,7 +10,7 @@ let create = {
     medicalrecord: async (req,res)=>{
         try {
             const id = req.userId;
-            const {p_id} = req.body;
+            const {p_id,d_id} = req.body;
             var result = await hospitalDB.findById(id,'hopital_name');
             // console.log(image);
             if (!result) {

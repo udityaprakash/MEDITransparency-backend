@@ -1,4 +1,5 @@
 const doctorDB = require("../../database/doctor");
+const patientDB = require("../../database/patient");
 const bcrypt = require('bcrypt');
 require('dotenv').config()
 const jwt = require("jsonwebtoken");
@@ -94,6 +95,36 @@ let Docprofile = {
                 msg: 'Internal Server Error'
             });
           }
+    },
+    patientprofile: async(req,res)=>{
+        const id = req.userId;
+        const {patientid} = req.body;
+        try{
+            var result = await patientDB.findById( patientid ,'general_details , patient_name , phone_number');
+            if(!result){
+                res.json({
+                    success:false,
+                    msg: 'No such patient found'
+                });
+                
+            }else{
+
+                res.json({
+                    success:true,
+                    msg: 'user info',
+                    imgurl: "https://meditransparency.onrender.com/user/photo/"+result._id,
+                    details:result
+                });
+            }
+
+        }catch(error){
+            console.error(error);
+            res.status(500).json({
+                success:false,
+                error:error,
+                msg: 'Internal Server Error'
+            });
+        }
     }
 
 }
