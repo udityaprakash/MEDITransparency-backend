@@ -15,7 +15,7 @@ const schema= new mongoose.Schema({
         ref: 'doctor'
     },
     title:String,
-    disc:String,
+    desc:String,
     p_priscription_photo:{
         name: String,
         data: Buffer,

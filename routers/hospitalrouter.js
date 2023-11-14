@@ -25,7 +25,7 @@ router.post('/adddoctors',auth.author, Hsignup.adddoctor);
 
 router.post('/assignpatient', auth.author, config.assignpatient);
 
-router.post('/create/medicalrecord', auth.author,create.medicalrecord);
+router.post('/create/medicalrecord', auth.author, upload.single('docfile'), create.medicalrecord);
 
 
 module.exports = router;
