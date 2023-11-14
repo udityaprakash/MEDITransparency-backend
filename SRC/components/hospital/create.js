@@ -90,9 +90,28 @@ let create = {
             console.error(error);
             res.status(500).json({success:false, msg: 'Internal server error.' });
         }
-    }
+    },
+    viewrecordimage: async (req , res )=>{
+        try {
+            const id = req.params.id;
+            const image = await recordDB.findById(id,'p_priscription_photo');
+            // console.log(image);
+            if (!image) {
+                res.status(404).json({ error: 'Not found' });
+            }else{
+                res.setHeader('Content-Type', image.p_priscription_photo.contentType);
+                res.send(image.p_priscription_photo.data);
+            }
+        
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal server error.' });
+          }
+    },
 
 }
+
+
 
 
 

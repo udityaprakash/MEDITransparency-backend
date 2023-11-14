@@ -1,5 +1,7 @@
 const doctorDB = require("../../database/doctor");
 const patientDB = require("../../database/patient");
+
+const recordDB = require("../../database/medicalrecord");
 const bcrypt = require('bcrypt');
 require('dotenv').config()
 const jwt = require("jsonwebtoken");
@@ -125,6 +127,46 @@ let Docprofile = {
                 msg: 'Internal Server Error'
             });
         }
+    },
+    medicalrecordlatest5 :async (req , res)=>{
+        const id = req.userId; 
+        const {p_id} = req.body;
+        var result =await patientDB.findById(p_id,'medical_history');
+        console.log(result);
+        if(!result){
+            res.json({
+                success:false,
+                msg:"no such patient found"
+            });
+        }else{
+            var arr = [];
+            let listlen;
+            let hist = result.medical_history;
+            console.log(hist);
+            (hist.length > 5)? listlen = 5 : listlen = hist.length;
+            console.log(listlen);
+            for(let i=0; i < listlen; i++){
+                var tile = {};
+                var rec = await recordDB.findById(result.medical_history[i].medicalrecord_id,'title , desc , createdAt');
+                if(rec){
+                    Object.assign(tile, {imgurl: "https://meditransparency.onrender.com/user/medicalrecord/"+rec._id});
+                    Object.assign(tile, {title: rec.title});
+                    Object.assign(tile, {discription: rec.desc});
+                    Object.assign(tile, {createdat: rec.createdAt});
+                    arr.push(tile);
+
+                }
+            }
+            res.json({
+                success:true,
+                msg:"data was send successfully",
+                count:listlen,
+                data:arr
+            });
+
+
+        }
+
     }
 
 }

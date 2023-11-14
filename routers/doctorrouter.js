@@ -31,6 +31,8 @@ router.get('/profiledetails', auth.author, Docprofile.profile);
 
 router.post('/patient/profiledetails', auth.author, Docprofile.patientprofile);
 
+router.post('/patient/medicalhistory', auth.author, Docprofile.medicalrecordlatest5);
+
 
 
 
