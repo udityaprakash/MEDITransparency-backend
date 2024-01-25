@@ -110,28 +110,32 @@ let Docprofile = {
                 });
                 
             }else{
-                let modifiedData;
+                let modifiedData = { ...result.general_details };
                 if (result.general_details && typeof result.general_details === 'object') {
-                    // Process data and replace null values with "--"
-                    modifiedData = { ...result.general_details };
-              
-                    // Define the properties you want to check and set to "--" if null
-                    const propertiesToCheck = ['dob','weight','location','city','state','country','bloodGroup'];
-              
-                    // Check and set null properties to "--"
+                    const propertiesToCheck = ['dob', 'weight', 'location', 'city', 'state', 'country', 'bloodGroup'];
+            
                     propertiesToCheck.forEach(property => {
-                      if (modifiedData[property] === undefined || modifiedData[property] == '') {
+                      if (modifiedData[property] === undefined || modifiedData[property] === '' || modifiedData[property] === null) {
                         modifiedData[property] = '--';
                       }
                     });
-                }
-                  result.general_details = modifiedData;            
+                    result.general_details = modifiedData;
+                  } else {
+                    result.general_details = {};
+                  }
+            
+                  console.log(modifiedData.weight);
 
                 res.json({
                     success:true,
                     msg: 'user info',
                     imgurl: "https://meditransparency.onrender.com/user/photo/"+result._id,
-                    details:result
+                    details:{
+                        "general_details": modifiedData,
+                        "_id": result._id,
+                        "patient_name": result.patient_name,
+                        "phone_number": result.phone_number,
+                    }
                 });
             }
 
