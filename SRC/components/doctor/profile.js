@@ -110,6 +110,22 @@ let Docprofile = {
                 });
                 
             }else{
+                let modifiedData;
+                if (result.general_details && typeof result.general_details === 'object') {
+                    // Process data and replace null values with "--"
+                    modifiedData = { ...result.general_details };
+              
+                    // Define the properties you want to check and set to "--" if null
+                    const propertiesToCheck = ['dob','weight','location','city','state','country','bloodGroup'];
+              
+                    // Check and set null properties to "--"
+                    propertiesToCheck.forEach(property => {
+                      if (modifiedData[property] === undefined || modifiedData[property] == '') {
+                        modifiedData[property] = '--';
+                      }
+                    });
+                }
+                  result.general_details = modifiedData;            
 
                 res.json({
                     success:true,
