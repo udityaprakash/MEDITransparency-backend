@@ -33,7 +33,12 @@ router.post('/patient/profiledetails', auth.author, Docprofile.patientprofile);
 
 router.post('/patient/medicalhistory', auth.author, Docprofile.medicalrecordlatest5);
 
+router.post('/patient/laboratory', auth.author, (req,res)=>{
+    res.json({success:true,labtests:[],msg:'No current Lab tests Found'});
+} );
 
-
+router.post('/patient/medicines', auth.author, (req,res)=>{
+    res.json({success:true,medicines:[],msg:'No current Medicines Found'});
+} );
 
 module.exports = router;

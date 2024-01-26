@@ -1,7 +1,15 @@
-// const signup = require("../componnents/authentications/user/signup");
+const { login , signup , setoffer , getphoto , getoffers ,deletealloffers} = require('../SRC/components/admin/methods');
+const router = require("express").Router();
+const auth = require("../SRC/Auth/Authorization/authorization");
+const {upload} = require("../SRC/Auth/File_Validators/imagefile");
 
-// //--doctor/signup
-// router.post('/signup',signup.post);
-// router.get('/signup',signup.get);
-// router.get('/signup/verifyotp/:email',signup.verifyotp);
-// router.post('/signup/verifyotp/:email',signup.checkotp);
+// //--doctor
+router.post('/signup',signup);
+router.post('/login',login);
+
+router.post('/setoffers', auth.author, upload.single('offer_photo'), setoffer);
+router.get('/offer/photo/:id', getphoto);
+router.get('/getoffers', getoffers);
+router.get('/deletealloffers',auth.author, deletealloffers);
+
+module.exports = router;
